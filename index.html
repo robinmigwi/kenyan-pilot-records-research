@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A conversational research study about how pilots in Kenya manage flight records, logbooks and licensing preparation.">
+<title>Pilot Records Research | Kenya</title>
+<style>
+:root{
+  --navy:#12213a;--blue:#2457a6;--blue-2:#3b78c9;--sky:#eef4fc;
+  --bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#dfe5ee;
+  --green:#027a48;--red:#b42318;--shadow:0 24px 70px rgba(22,32,51,.11)
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+.page{width:min(900px,100%);margin:0 auto;padding:16px 12px 48px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 12px;font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.top strong{color:var(--text)}
+.shell{background:var(--card);border:1px solid #e7ebf1;border-radius:28px;box-shadow:var(--shadow);overflow:hidden}
+.hero{background:linear-gradient(135deg,#102b57 0%,#2457a6 72%,#376fc0 100%);color:#fff;padding:42px 34px 30px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:310px;height:310px;right:-145px;top:-150px;border-radius:50%;background:rgba(255,255,255,.08)}
+.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;opacity:.78}
+h1{font-size:clamp(34px,6vw,56px);line-height:1.02;letter-spacing:-.045em;max-width:760px;margin:8px 0 16px}
+.hero p{max-width:720px;font-size:16px;color:rgba(255,255,255,.88);margin:0}
+.hero-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.hero-chip{font-size:11px;padding:7px 10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);border-radius:999px}
+.private-note{margin-top:17px;font-size:11px;color:rgba(255,255,255,.68);max-width:720px}
+.chat{padding:25px 26px 28px;background:#fbfcfe}
+.progress{height:5px;background:#e6ebf3;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--blue-2));transition:width .3s ease}
+.progress-meta{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin:7px 0 19px}
+.screen{display:none}.screen.active{display:block;animation:rise .22s ease}.screen.leave{animation:fadeOut .14s ease}@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+.bot-row{display:flex;gap:10px;align-items:flex-start}.avatar{width:38px;height:38px;flex:0 0 38px;border-radius:50%;display:grid;place-items:center;background:#e8eff9;color:var(--blue);font-weight:900;font-size:14px}.bot{max-width:730px}
+.bot-meta{font-size:11px;color:var(--muted);font-weight:800;margin:1px 0 5px}.bubble{display:inline-block;background:#fff;border:1px solid #e7ebf2;border-radius:5px 18px 18px 18px;padding:14px 16px;box-shadow:0 4px 16px rgba(20,32,54,.05)}
+.question{font-size:22px;line-height:1.18;letter-spacing:-.02em;font-weight:800}.sub{font-size:13px;color:var(--muted);margin:9px 0 0}.answer{margin:14px 0 0 48px;max-width:690px}
+.option-grid{display:grid;gap:9px}.option{display:flex;align-items:flex-start;gap:10px;padding:12px 13px;background:#fff;border:1px solid var(--line);border-radius:14px;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}.option:hover{border-color:#a9bddf;background:#fbfdff;transform:translateY(-1px)}.option.selected{background:var(--sky);border-color:#6c91cc}.option input{margin-top:3px;accent-color:var(--blue)}.option b{font-size:14px;display:block}.option small{font-size:12px;color:var(--muted);display:block;margin-top:2px}
+textarea,input[type="text"],input[type="email"]{width:100%;font:inherit;color:var(--text);background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px 14px;outline:none;transition:border-color .15s,box-shadow .15s}.text-area{min-height:122px;resize:vertical}.one-line{min-height:auto}textarea:focus,input:focus{border-color:#6c91cc;box-shadow:0 0 0 4px rgba(36,87,166,.10)}
+.scale{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.scale button{padding:12px 5px;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;font-weight:800;cursor:pointer}.scale button:hover,.scale button.active{background:var(--sky);border-color:#6c91cc;color:var(--blue)}.scale-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:7px}
+.controls{display:flex;justify-content:space-between;gap:10px;margin:22px 0 0 48px}.controls button{border:0;border-radius:13px;padding:12px 17px;font:inherit;font-weight:850;cursor:pointer}.back{background:#fff;border:1px solid var(--line)!important;color:var(--text)}.next,.submit{background:var(--blue);color:#fff}.next:hover,.submit:hover{background:#183e79}
+.tip{font-size:11px;color:var(--muted);margin:10px 0 0 48px}.error{display:none;color:var(--red);font-size:12px;margin:8px 0 0 48px}.error.show{display:block}
+.hidden{display:none!important}.optional{color:#98a2b3;font-weight:500;font-size:11px}.summary{background:#f7f9fd;border:1px solid #e4e9f2;border-radius:14px;padding:12px 13px;font-size:12px;color:#475467;margin-top:12px}
+.success{padding:66px 24px;text-align:center;background:#fff}.check{width:64px;height:64px;display:grid;place-items:center;border-radius:50%;background:#ecfdf3;color:var(--green);font-size:28px;font-weight:900;margin:0 auto 15px}.success h2{font-size:30px;letter-spacing:-.03em;margin:0 0 8px}.success p{max-width:570px;margin:0 auto;color:var(--muted)}
+.footer{padding:0 24px 26px;text-align:center;color:var(--muted);font-size:11px;background:#fff}
+@media(max-width:650px){.page{padding:8px 7px 28px}.top{padding:4px 2px 10px}.shell{border-radius:22px}.hero{padding:31px 21px 26px}h1{font-size:34px}.chat{padding:19px 14px 22px}.answer,.controls,.tip,.error{margin-left:45px}.question{font-size:20px}.scale{grid-template-columns:repeat(6,1fr)}.scale button{padding:10px 3px}.avatar{width:34px;height:34px;flex-basis:34px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top"><strong>Kenyan Aviation Research</strong><span>5–8 minutes</span></div>
+  <div class="shell">
+    <section class="hero">
+      <div class="kicker">A short conversation with pilots</div>
+      <h1>Can flight records be easier to manage?</h1>
+      <p>We're researching how pilots in Kenya actually keep, update, verify and use their flight records. We're trying to understand the problem before deciding whether there is anything worth building.</p>
+      <div class="hero-row"><span class="hero-chip">No sales pitch</span><span class="hero-chip">Real examples matter</span><span class="hero-chip">Share with pilot friends</span></div>
+      <div class="private-note">Please don't enter licence numbers, ID numbers, medical details, passenger information or confidential employer information.</div>
+    </section>
+
+    <section class="chat">
+      <div class="progress"><i id="bar"></i></div>
+      <div class="progress-meta"><span id="progressText">Let's start.</span><span id="progressCount">1 of 18</span></div>
+
+      <form id="survey" name="kenyan-pilot-records-research" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" netlify>
+        <input type="hidden" name="form-name" value="kenyan-pilot-records-research">
+        <input type="hidden" name="source" id="source">
+        <input type="hidden" name="referral" id="referral">
+        <input type="hidden" name="utm_source" id="utm_source">
+        <input type="hidden" name="utm_medium" id="utm_medium">
+        <input type="hidden" name="utm_campaign" id="utm_campaign">
+        <input type="hidden" name="landing_page" id="landing_page">
+        <input type="hidden" name="responded_at_local" id="responded_at_local">
+        <div style="position:absolute;left:-10000px;top:-10000px"><label>Leave blank: <input name="bot-field" tabindex="-1" autocomplete="off"></label></div>
+
+        <!-- 01 -->
+        <section class="screen active" data-required="role">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">First, what best describes you?</div><div class="sub">We want to compare different pilot experiences.</div></div></div></div>
+          <div class="answer option-grid" data-group="role">
+            <label class="option"><input type="radio" name="role" value="Student pilot"><span><b>Student pilot</b></span></label>
+            <label class="option"><input type="radio" name="role" value="Private pilot"><span><b>Private pilot</b></span></label>
+            <label class="option"><input type="radio" name="role" value="Commercial / charter pilot"><span><b>Commercial / charter pilot</b></span></label>
+            <label class="option"><input type="radio" name="role" value="Airline pilot"><span><b>Airline pilot</b></span></label>
+            <label class="option"><input type="radio" name="role" value="Instructor / examiner"><span><b>Instructor / examiner</b></span></label>
+            <label class="option"><input type="radio" name="role" value="Other aviation professional"><span><b>Other aviation professional</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 02 -->
+        <section class="screen" data-required="experience">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">And roughly how long have you been flying?</div><div class="sub">An estimate is completely fine.</div></div></div></div>
+          <div class="answer option-grid" data-group="experience">
+            <label class="option"><input type="radio" name="experience" value="Less than 1 year"><span><b>Less than 1 year</b></span></label>
+            <label class="option"><input type="radio" name="experience" value="1–3 years"><span><b>1–3 years</b></span></label>
+            <label class="option"><input type="radio" name="experience" value="3–5 years"><span><b>3–5 years</b></span></label>
+            <label class="option"><input type="radio" name="experience" value="5–10 years"><span><b>5–10 years</b></span></label>
+            <label class="option"><input type="radio" name="experience" value="10+ years"><span><b>10+ years</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 03 -->
+        <section class="screen" data-required="record_method">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">What are you using today to keep your flight records?</div></div></div></div>
+          <div class="answer option-grid" data-group="record_method">
+            <label class="option"><input type="radio" name="record_method" value="Physical logbook"><span><b>Physical logbook</b><small>Mostly or entirely on paper</small></span></label>
+            <label class="option"><input type="radio" name="record_method" value="Electronic logbook"><span><b>Electronic logbook</b><small>Mostly or entirely digital</small></span></label>
+            <label class="option"><input type="radio" name="record_method" value="Both paper and electronic"><span><b>Both</b><small>I maintain paper and digital records</small></span></label>
+            <label class="option"><input type="radio" name="record_method" value="Other"><span><b>Something else</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 04 -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">Take me through what happens after you land and finish a flight.</div><div class="sub">What do you do with the flight information? Write it down, update something, get a signature, calculate totals?</div></div></div></div>
+          <div class="answer"><textarea name="after_flight_process" class="text-area" placeholder="Just describe your normal process in your own words..."></textarea></div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 05 -->
+        <section class="screen" data-required="maintenance_frequency">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">How often are you updating or maintaining those records?</div></div></div></div>
+          <div class="answer option-grid" data-group="maintenance_frequency">
+            <label class="option"><input type="radio" name="maintenance_frequency" value="After almost every flight"><span><b>After almost every flight</b></span></label>
+            <label class="option"><input type="radio" name="maintenance_frequency" value="A few times a week"><span><b>A few times a week</b></span></label>
+            <label class="option"><input type="radio" name="maintenance_frequency" value="About weekly"><span><b>About weekly</b></span></label>
+            <label class="option"><input type="radio" name="maintenance_frequency" value="Less often / catch up later"><span><b>I often catch up later</b></span></label>
+            <label class="option"><input type="radio" name="maintenance_frequency" value="Not responsible for maintaining records"><span><b>I don't personally maintain them</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 06 -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">Which parts of the process take the most effort?</div><div class="sub">Pick as many as actually apply. Don't choose something just because it sounds useful.</div></div></div></div>
+          <div class="answer option-grid">
+            <label class="option"><input type="checkbox" name="effort_points" value="Entering flight details"><span><b>Entering the flight details</b></span></label>
+            <label class="option"><input type="checkbox" name="effort_points" value="Calculating totals"><span><b>Calculating running totals</b></span></label>
+            <label class="option"><input type="checkbox" name="effort_points" value="Tracking categories"><span><b>Tracking categories such as PIC, night, instrument, etc.</b></span></label>
+            <label class="option"><input type="checkbox" name="effort_points" value="Tracking aircraft / type time"><span><b>Tracking aircraft or type time</b></span></label>
+            <label class="option"><input type="checkbox" name="effort_points" value="Finding old records"><span><b>Finding old records later</b></span></label>
+            <label class="option"><input type="checkbox" name="effort_points" value="Instructor / examiner sign-off"><span><b>Getting records signed or verified</b></span></label>
+            <label class="option"><input type="checkbox" name="effort_points" value="Licensing / renewal preparation"><span><b>Preparing for licensing, ratings or renewals</b></span></label>
+            <label class="option"><input type="checkbox" name="effort_points" value="None"><span><b>None of these are particularly difficult</b></span></label>
+          </div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 07 -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">Can you remember the last time your records actually caused you a problem?</div><div class="sub">We're much more interested in a real example than a general opinion.</div></div></div></div>
+          <div class="answer"><textarea name="recent_problem" class="text-area" placeholder="What were you trying to do, and what made it difficult?"></textarea></div>
+          <div class="tip">A small example counts. “I had to search through old pages for X” is useful.</div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 08 -->
+        <section class="screen" data-required="problem_frequency">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">How often does something like that happen?</div><div class="sub">Not how often you fly. How often the record-keeping issue itself happens.</div></div></div></div>
+          <div class="answer option-grid" data-group="problem_frequency">
+            <label class="option"><input type="radio" name="problem_frequency" value="Never"><span><b>Never</b></span></label>
+            <label class="option"><input type="radio" name="problem_frequency" value="Rarely"><span><b>Rarely</b></span></label>
+            <label class="option"><input type="radio" name="problem_frequency" value="Every few months"><span><b>Every few months</b></span></label>
+            <label class="option"><input type="radio" name="problem_frequency" value="About monthly"><span><b>About monthly</b></span></label>
+            <label class="option"><input type="radio" name="problem_frequency" value="Frequently"><span><b>Frequently</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 09 -->
+        <section class="screen" data-required="time_cost">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">When you do need to dig into your records, how long can it take?</div></div></div></div>
+          <div class="answer option-grid" data-group="time_cost">
+            <label class="option"><input type="radio" name="time_cost" value="Less than 15 minutes"><span><b>Less than 15 minutes</b></span></label>
+            <label class="option"><input type="radio" name="time_cost" value="15–30 minutes"><span><b>15–30 minutes</b></span></label>
+            <label class="option"><input type="radio" name="time_cost" value="30–60 minutes"><span><b>30–60 minutes</b></span></label>
+            <label class="option"><input type="radio" name="time_cost" value="1–2 hours"><span><b>1–2 hours</b></span></label>
+            <label class="option"><input type="radio" name="time_cost" value="2–4 hours"><span><b>2–4 hours</b></span></label>
+            <label class="option"><input type="radio" name="time_cost" value="More than 4 hours"><span><b>More than 4 hours</b></span></label>
+            <label class="option"><input type="radio" name="time_cost" value="It varies"><span><b>It varies too much to say</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 10 -->
+        <section class="screen" data-required="official_use">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">In the last 12 months, have you needed your flight records for an official or important purpose?</div><div class="sub">For example a licence, rating, renewal, training, employment or operator requirement.</div></div></div></div>
+          <div class="answer option-grid" data-group="official_use">
+            <label class="option"><input type="radio" name="official_use" value="Yes, in the last 3 months"><span><b>Yes, in the last 3 months</b></span></label>
+            <label class="option"><input type="radio" name="official_use" value="Yes, 4–12 months ago"><span><b>Yes, 4–12 months ago</b></span></label>
+            <label class="option"><input type="radio" name="official_use" value="No"><span><b>No</b></span></label>
+            <label class="option"><input type="radio" name="official_use" value="Not applicable"><span><b>Not applicable to me</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 11 -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">What did you actually have to do when you needed those records?</div><div class="sub">We want the steps, not whether you liked them.</div></div></div></div>
+          <div class="answer"><textarea name="official_process" class="text-area" placeholder="For example: find pages, calculate categories, get copies certified, prepare a summary, check recency..."></textarea></div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 12 -->
+        <section class="screen" data-required="record_reliability">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">How confident are you that your current records and totals are always accurate?</div><div class="sub">This is about the process you use today.</div></div></div></div>
+          <div class="answer scale" data-group="record_reliability" aria-label="Accuracy confidence from 0 to 5">
+            <button type="button" data-value="0">0</button><button type="button" data-value="1">1</button><button type="button" data-value="2">2</button><button type="button" data-value="3">3</button><button type="button" data-value="4">4</button><button type="button" data-value="5">5</button>
+          </div>
+          <input type="hidden" name="record_reliability" id="record_reliability">
+          <div class="scale-labels answer"><span>Not confident</span><span>Completely confident</span></div>
+          <div class="error" data-error>Please select a number.</div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 13 -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">Do you already use an app, spreadsheet or electronic logbook?</div><div class="sub">Tell us what it is and what job it does for you.</div></div></div></div>
+          <div class="answer"><textarea name="existing_tools" class="text-area" placeholder="For example: app for logging, spreadsheet for totals, paper for official record..."></textarea></div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 14 -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Aviation Research</div><div class="bubble"><div class="question">What does your current setup still make difficult?</div><div class="sub">Especially anything you still calculate, search for, double-enter, print, sign or worry about.</div></div></div></div>
+          <div class="answer"><textarea name="current_gaps" class="text-area" placeholder="Tell us what's still manual or frustrating..."></textarea></div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 15 concept -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">One idea we're exploring</div><div class="bubble"><div class="question">Here is the kind of solution we're exploring.</div><div class="sub">A system where you record a flight once, and it keeps your totals, categories and history organised automatically. It could also help you see what records you have, what may need attention, and prepare summaries when you need them.</div></div></div></div>
+          <div class="bot-row" style="margin-top:12px"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Now we want your view</div><div class="bubble"><div class="question">Which part of that would actually be useful to you, if any?</div></div></div></div>
+          <div class="answer option-grid" data-group="concept_reaction">
+            <label class="option"><input type="checkbox" name="concept_reaction" value="Automatic totals"><span><b>Automatic totals</b><small>Less manual adding and recalculating</small></span></label>
+            <label class="option"><input type="checkbox" name="concept_reaction" value="Searchable history"><span><b>Searchable history</b><small>Find flights and records quickly</small></span></label>
+            <label class="option"><input type="checkbox" name="concept_reaction" value="Know what needs attention"><span><b>Know what needs attention</b><small>See gaps, upcoming requirements or records that need action</small></span></label>
+            <label class="option"><input type="checkbox" name="concept_reaction" value="Licensing summaries"><span><b>Licensing / application summaries</b><small>Prepare the information when it is needed</small></span></label>
+            <label class="option"><input type="checkbox" name="concept_reaction" value="Verified records"><span><b>Verified records</b><small>Keep sign-offs and verification connected to the record</small></span></label>
+            <label class="option"><input type="checkbox" name="concept_reaction" value="None"><span><b>None of these</b><small>I don't see a strong need for this</small></span></label>
+          </div>
+          <div class="answer" style="margin-top:12px"><textarea name="concept_reaction_detail" class="text-area" placeholder="Anything about the idea that stands out to you? What would make it genuinely useful? (Optional)"></textarea></div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 16 -->
+        <section class="screen">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Be honest with us</div><div class="bubble"><div class="question">What would stop you from using something like that?</div><div class="sub">Cost, trust, regulation, already having a system, habit, privacy, complexity — anything.</div></div></div></div>
+          <div class="answer"><textarea name="barriers" class="text-area" placeholder="What would make you say: no thanks?"></textarea></div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 17 -->
+        <section class="screen" data-required="test_interest">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Almost there</div><div class="bubble"><div class="question">Would you actually try a simple version with your own records before we built anything serious?</div></div></div></div>
+          <div class="answer option-grid" data-group="test_interest">
+            <label class="option"><input type="radio" name="test_interest" value="Yes"><span><b>Yes</b><small>I'd be willing to test it</small></span></label>
+            <label class="option"><input type="radio" name="test_interest" value="Maybe"><span><b>Maybe</b><small>I'd want to see what the test involves</small></span></label>
+            <label class="option"><input type="radio" name="test_interest" value="No"><span><b>No</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 18 -->
+        <section class="screen" data-required="payment_reaction">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">One last thing about the idea</div><div class="bubble"><div class="question">If it genuinely solved a problem you have described here, which would be closest to your reaction?</div></div></div></div>
+          <div class="answer option-grid" data-group="payment_reaction">
+            <label class="option"><input type="radio" name="payment_reaction" value="Would not pay"><span><b>I wouldn't pay for it</b></span></label>
+            <label class="option"><input type="radio" name="payment_reaction" value="Maybe"><span><b>Maybe, depending on the value</b></span></label>
+            <label class="option"><input type="radio" name="payment_reaction" value="Likely"><span><b>I'd likely pay if it solved a real problem</b></span></label>
+            <label class="option"><input type="radio" name="payment_reaction" value="Would pay"><span><b>I'd pay for something I relied on</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+          <div class="controls"><button type="button" class="back">Back</button><button type="button" class="next">Continue</button></div>
+        </section>
+
+        <!-- 19 -->
+        <section class="screen" data-required="waitlist_interest">
+          <div class="bot-row"><div class="avatar">A</div><div class="bot"><div class="bot-meta">Before you go</div><div class="bubble"><div class="question">Would you like to join the waitlist?</div><div class="sub">If we decide to build this, we can let you know when the solution is ready.</div></div></div></div>
+          <div class="answer option-grid" data-group="waitlist_interest">
+            <label class="option"><input type="radio" name="waitlist_interest" value="Yes"><span><b>Yes, keep me on the waitlist</b><small>Let me know when it's ready</small></span></label>
+            <label class="option"><input type="radio" name="waitlist_interest" value="Maybe"><span><b>Maybe</b><small>I'd like to hear more later</small></span></label>
+            <label class="option"><input type="radio" name="waitlist_interest" value="No"><span><b>No thanks</b></span></label>
+          </div><div class="error" data-error>Please choose one.</div>
+
+          <div id="waitlistContact" class="answer hidden" style="margin-top:14px">
+            <div style="display:grid;gap:9px">
+              <input type="text" name="name" class="one-line" placeholder="Your name (optional)">
+              <input type="email" name="email" class="one-line" placeholder="Email address (optional)">
+              <input type="tel" name="phone" class="one-line" placeholder="Phone number (optional)">
+            </div>
+            <div class="summary">Only share contact details if you'd like us to contact you about the product when it is built.</div>
+          </div>
+
+          <div class="controls"><button type="button" class="back">Back</button><button type="submit" class="submit">Send my response</button></div>
+          <div class="tip">Your answers are saved on this device while you move through the questions. Your full response is sent to us when you tap “Send my response.”</div>
+        </section>
+      </form>
+    </section>
+    <section class="success hidden" id="success">
+      <div class="check">✓</div>
+      <h2>Thanks. That was genuinely useful.</h2>
+      <p>We're using these responses to understand the real problem before we decide what to build. Thanks for helping us test the idea.</p>
+    </section>
+    <div class="footer">Kenyan Pilot Records Research · September 2026</div>
+  </div>
+</div>
+<script>
+(() => {
+  const form = document.getElementById('survey');
+  const screens = [...form.querySelectorAll('.screen')];
+  const bar = document.getElementById('bar');
+  const progressText = document.getElementById('progressText');
+  const progressCount = document.getElementById('progressCount');
+  const success = document.getElementById('success');
+  let index = 0;
+  const params = new URLSearchParams(window.location.search);
+  const setHidden = (id, key, fallback='') => { document.getElementById(id).value = params.get(key) || fallback; };
+  setHidden('source','source');
+  setHidden('referral','ref');
+  setHidden('utm_source','utm_source');
+  setHidden('utm_medium','utm_medium');
+  setHidden('utm_campaign','utm_campaign');
+  document.getElementById('landing_page').value = window.location.href.split('?')[0];
+  document.getElementById('responded_at_local').value = new Date().toISOString();
+
+  const questionLabel = [
+    'Let\'s start.','A little context.','Your current setup.','Walk me through it.','Your routine.','Where the effort is.','A real example.','How often.','Time cost.','Important moments.','What happened.','Confidence.','Current tools.','What\'s missing.','One idea we\'re exploring.','Be honest with us.','Would you test it?','One last thing about the idea.','Join the waitlist?'
+  ];
+
+  function updateProgress(){
+    const pct = ((index+1)/screens.length)*100;
+    bar.style.width = pct + '%';
+    progressCount.textContent = `${index+1} of ${screens.length}`;
+    progressText.textContent = questionLabel[index] || 'Almost there.';
+  }
+
+  function clearErrors(screen){ screen.querySelectorAll('.error').forEach(e=>e.classList.remove('show')); }
+  function validate(screen){
+    clearErrors(screen);
+    const requiredName = screen.dataset.required;
+    if(!requiredName) return true;
+    let ok = true;
+    if(requiredName === 'record_reliability') ok = !!document.getElementById('record_reliability').value;
+    else ok = !!form.querySelector(`[name="${CSS.escape(requiredName)}"]:checked`);
+    if(!ok){ const err = screen.querySelector('[data-error]'); if(err) err.classList.add('show'); }
+    return ok;
+  }
+
+  function showScreen(nextIndex, direction='forward'){
+    if(nextIndex < 0 || nextIndex >= screens.length) return;
+    const old = screens[index];
+    old.classList.remove('active');
+    old.classList.add('leave');
+    setTimeout(()=>old.classList.remove('leave'),150);
+    index = nextIndex;
+    screens[index].classList.add('active');
+    updateProgress();
+    window.scrollTo({top: document.querySelector('.shell').offsetTop - 12, behavior:'smooth'});
+  }
+
+  function next(){ if(!validate(screens[index])) return; saveDraft(); if(index < screens.length-1) showScreen(index+1,'forward'); }
+  function back(){ saveDraft(); if(index>0) showScreen(index-1,'back'); }
+  form.querySelectorAll('.next').forEach(b=>b.addEventListener('click',next));
+  form.querySelectorAll('.back').forEach(b=>b.addEventListener('click',back));
+
+  form.querySelectorAll('.option').forEach(option=>{
+    const input = option.querySelector('input');
+    input.addEventListener('change',()=>{
+      const group = option.closest('[data-group]');
+      if(group && input.type === 'radio') group.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));
+      option.classList.toggle('selected', input.checked);
+    });
+  });
+
+  form.querySelectorAll('input[name="waitlist_interest"]').forEach(input=>input.addEventListener('change',()=>{
+    const contact = document.getElementById('waitlistContact');
+    if(contact) contact.classList.toggle('hidden', input.value === 'No' || !input.checked);
+  }));
+
+  document.querySelectorAll('.scale button').forEach(btn=>btn.addEventListener('click',()=>{
+    document.getElementById('record_reliability').value = btn.dataset.value;
+    document.querySelectorAll('.scale button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    clearErrors(screens[index]);
+  }));
+
+  const STORAGE_KEY = 'pilot-records-research-draft-v4';
+
+  function saveDraft(){
+    try{
+      const data = {};
+      new FormData(form).forEach((value, key)=>{
+        if(key === 'bot-field' || key === 'form-name') return;
+        if(Object.prototype.hasOwnProperty.call(data,key)){
+          data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+        }else{
+          data[key] = value;
+        }
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({index, data}));
+    }catch(err){}
+  }
+
+  function restoreDraft(){
+    try{
+      const raw=localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const saved=JSON.parse(raw);
+      const data=saved.data || {};
+      Object.entries(data).forEach(([key,value])=>{
+        const values=Array.isArray(value)?value:[value];
+        values.forEach(v=>{
+          const candidates=[...form.querySelectorAll(`[name="${CSS.escape(key)}"]`)];
+          const match=candidates.find(el=>el.type==='radio' || el.type==='checkbox' ? el.value===v : true);
+          if(!match) return;
+          if(match.type==='radio' || match.type==='checkbox'){
+            match.checked=true;
+            match.closest('.option')?.classList.add('selected');
+          }else{
+            match.value=v;
+          }
+        });
+      });
+      const waitlistChoice = form.querySelector('[name="waitlist_interest"]:checked');
+      const waitlistContact = document.getElementById('waitlistContact');
+      if(waitlistContact) waitlistContact.classList.toggle('hidden', !waitlistChoice || waitlistChoice.value === 'No');
+      if(Number.isInteger(saved.index) && saved.index>=0 && saved.index<screens.length){
+        screens.forEach(x=>x.classList.remove('active'));
+        index=saved.index; screens[index].classList.add('active');
+      }
+      const score=document.getElementById('record_reliability').value;
+      if(score){
+        document.querySelectorAll('.scale button').forEach(b=>b.classList.toggle('active',b.dataset.value===score));
+      }
+      updateProgress();
+    }catch(err){}
+  }
+
+  function clearDraft(){
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(err){}
+  }
+
+  function encodedFormBody(){
+    const fd=new FormData(form);
+    const body=new URLSearchParams();
+    for(const [key,value] of fd.entries()) body.append(key,value);
+    return body.toString();
+  }
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(!validate(screens[index])) return;
+    document.getElementById('responded_at_local').value = new Date().toISOString();
+    const submitButton=form.querySelector('.submit');
+    if(submitButton){ submitButton.disabled=true; submitButton.textContent='Sending…'; }
+    try{
+      const response=await fetch('/',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:encodedFormBody()
+      });
+      if(!response.ok) throw new Error('Netlify submission failed');
+      clearDraft();
+      form.classList.add('hidden');
+      document.querySelector('.progress').parentElement.classList.add('hidden');
+      success.classList.remove('hidden');
+      window.scrollTo({top: document.querySelector('.shell').offsetTop - 12, behavior:'smooth'});
+    }catch(err){
+      if(submitButton){ submitButton.disabled=false; submitButton.textContent='Send my response'; }
+      alert('We could not send your response yet. Please check your connection and try again. Your answers are still saved on this device.');
+    }
+  });
+
+  form.addEventListener('input',saveDraft);
+  form.addEventListener('change',saveDraft);
+
+  // If Netlify returns the page with a query/hash after a successful POST, show the confirmation state.
+  if(params.get('submitted') === 'true' || window.location.hash === '#thanks'){
+    clearDraft();
+    form.classList.add('hidden');
+    document.querySelector('.progress').parentElement.classList.add('hidden');
+    success.classList.remove('hidden');
+  } else {
+    restoreDraft();
+  }
+  updateProgress();
+})();
+</script>
+</body>
+</html>
